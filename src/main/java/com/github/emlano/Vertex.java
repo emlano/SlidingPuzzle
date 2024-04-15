@@ -1,11 +1,13 @@
 package com.github.emlano;
 
+import java.util.Objects;
+
 public class Vertex {
     final int x;
     final int y;
-    final char value;
+    final String value;
 
-    public Vertex(int x, int y, char value) {
+    public Vertex(int x, int y, String value) {
         this.x = x;
         this.y = y;
         this.value = value;
@@ -18,12 +20,12 @@ public class Vertex {
 
         Vertex other = (Vertex) obj;
 
-        return other.x == this.x && other.y == this.y && this.value == other.value;
+        return other.x == this.x && other.y == this.y && this.value.equals(other.value);
     }
 
     @Override
     public int hashCode() {
-        return this.x + this.y + this.value;
+        return this.x + this.y + this.value.hashCode();
     }
 
     @Override
