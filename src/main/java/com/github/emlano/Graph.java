@@ -1,32 +1,19 @@
 package com.github.emlano;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+
 public class Graph {
+    private ArrayList<LinkedList<Vertex>> adjList;
 
-}
-
-class Vertex {
-    final int x;
-    final int y;
-    final String value;
-
-    public Vertex(int x, int y, String value) {
-        this.x = x;
-        this.y = y;
-        this.value = value;
+    public Graph() {
+        this.adjList = new ArrayList<>();
     }
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == null) return false;
-        if (obj.getClass() != Vertex.class) return false;
-
-        Vertex other = (Vertex) obj;
-
-        return other.x == this.x && other.y == this.y && this.value.equals(other.value);
-    }
-
-    @Override
-    public int hashCode() {
-        return this.x + this.y + this.value.hashCode();
+    public void addVertex(Vertex v) {
+        if (adjList.stream().anyMatch(e -> e.getFirst().equals(v))) return;
+        LinkedList<Vertex> linkedList = new LinkedList<>();
+        linkedList.add(v);
+        adjList.add(linkedList);
     }
 }
