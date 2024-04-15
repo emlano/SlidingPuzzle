@@ -3,9 +3,9 @@ package com.github.emlano;
 public class Vertex {
     final int x;
     final int y;
-    final String value;
+    final char value;
 
-    public Vertex(int x, int y, String value) {
+    public Vertex(int x, int y, char value) {
         this.x = x;
         this.y = y;
         this.value = value;
@@ -18,11 +18,16 @@ public class Vertex {
 
         Vertex other = (Vertex) obj;
 
-        return other.x == this.x && other.y == this.y && this.value.equals(other.value);
+        return other.x == this.x && other.y == this.y && this.value == other.value;
     }
 
     @Override
     public int hashCode() {
-        return this.x + this.y + this.value.hashCode();
+        return this.x + this.y + this.value;
+    }
+
+    @Override
+    public String toString() {
+        return "%s (%d, %d)".formatted(value, x, y);
     }
 }

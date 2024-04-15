@@ -1,19 +1,38 @@
 package com.github.emlano;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Graph {
-    private ArrayList<LinkedList<Vertex>> adjList;
+    private final Map<Vertex, ArrayList<Vertex>> adjList;
 
     public Graph() {
-        this.adjList = new ArrayList<>();
+        this.adjList = new HashMap<>();
     }
 
     public void addVertex(Vertex v) {
-        if (adjList.stream().anyMatch(e -> e.getFirst().equals(v))) return;
-        LinkedList<Vertex> linkedList = new LinkedList<>();
-        linkedList.add(v);
-        adjList.add(linkedList);
+        if (adjList.containsKey(v)) throw new RuntimeException("Error: Attempted to insert a duplicate vertex");
+        adjList.put(v, new ArrayList<>());
+    }
+
+    public void addEdge(Vertex sv, Vertex dv) {
+        adjList.get(sv).add(dv);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (Vertex i : adjList.keySet()) {
+            sb.append("%s -> ".formatted(i.toString()));
+
+            for (Vertex j : adjList.get(i)) {
+                sb.append("%s ".formatted(j.toString()));
+            }
+            sb.append("\n");
+        }
+
+        return sb.toString();
     }
 }
