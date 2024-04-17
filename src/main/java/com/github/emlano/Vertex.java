@@ -1,7 +1,5 @@
 package com.github.emlano;
 
-import java.util.Objects;
-
 public class Vertex {
     final int x;
     final int y;
@@ -30,6 +28,6 @@ public class Vertex {
 
     @Override
     public String toString() {
-        return "%s (%d, %d)".formatted(value, x, y);
+        return "'%s' (%d,%d)".formatted(value ,x, y);
     }
 }

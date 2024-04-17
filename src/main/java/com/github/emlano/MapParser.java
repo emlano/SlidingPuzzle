@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 public class MapParser {
     public static String file = "";
-    public static String[][] nodeList;
+    public static Vertex[][] vertices;
     public static int mapHeight;
     public static int mapWidth;
 
@@ -29,13 +29,17 @@ public class MapParser {
             mapHeight = rowList.size();
             mapWidth = rowList.getFirst().split("").length;
 
-            nodeList = new String[mapHeight][mapWidth];
+            vertices = new Vertex[mapHeight][mapWidth];
 
-            for (int i = 0; i < mapHeight; i++) {
-                if (rowList.get(i).split("").length != mapWidth)
-                    throw new RuntimeException("Error: Non uniform map width at row " + (i + 1));
+            for (int row = 0; row < mapHeight; row++) {
+                String[] columns = rowList.get(row).split("");
 
-                nodeList[i] = rowList.get(i).split("");
+                if (columns.length != mapWidth)
+                    throw new RuntimeException("Error: Non uniform map width at row " + (row + 1));
+
+                for (int col = 0; col < mapWidth; col++) {
+                    vertices[row][col] = new Vertex(col + 1, row + 1, columns[col]);
+                }
             }
 
         } catch (IOException e) {
@@ -46,20 +50,23 @@ public class MapParser {
     }
 
     public static void parseGraph(Graph graph) {
-        Vertex prev = null;
-        Vertex curr;
-
-        for (int row = 0; row < nodeList.length; row++) {
-            for (int col = 0; col < nodeList.length; col++) {
-                curr = new Vertex(col, row, nodeList[row][col]);
+        for (int row = 0; row < mapHeight; row++) {
+            for (int col = 0; col < mapWidth; col++) {
+                Vertex curr = vertices[row][col];
+                Vertex prev = null;
                 graph.addVertex(curr);
 
-                if (col >= 1) {
+                if (row > 0) {
+                    prev = vertices[row - 1][col];
                     graph.addEdge(curr, prev);
                     graph.addEdge(prev, curr);
                 }
 
-                prev = curr;
+                if (col > 0) {
+                    prev = vertices[row][col - 1];
+                    graph.addEdge(curr, prev);
+                    graph.addEdge(prev, curr);
+                }
             }
         }
     }
