@@ -6,6 +6,8 @@ import java.util.Map;
 
 public class Graph {
     private final Map<Vertex, ArrayList<Vertex>> adjList;
+    public Vertex start = null;
+    public Vertex end = null;
 
     public Graph() {
         this.adjList = new HashMap<>();

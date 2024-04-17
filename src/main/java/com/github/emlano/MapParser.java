@@ -56,6 +56,16 @@ public class MapParser {
                 Vertex prev = null;
                 graph.addVertex(curr);
 
+                if (curr.value.equals("S")) {
+                    if (graph.start != null) throw new RuntimeException("Error: Multiple starts cannot exist!");
+                    graph.start = curr;
+                }
+
+                if (curr.value.equals("F")) {
+                    if (graph.end != null) throw new RuntimeException("Error: Multiple ends cannot exist!");
+                    graph.end = curr;
+                }
+
                 if (row > 0) {
                     prev = vertices[row - 1][col];
                     graph.addEdge(curr, prev);
