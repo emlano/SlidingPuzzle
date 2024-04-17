@@ -38,7 +38,7 @@ public class MapParser {
                     throw new RuntimeException("Error: Non uniform map width at row " + (row + 1));
 
                 for (int col = 0; col < mapWidth; col++) {
-                    vertices[row][col] = new Vertex(col + 1, row + 1, columns[col]);
+                    vertices[row][col] = new Vertex(row + 1, col + 1, columns[col]);
                 }
             }
 
@@ -57,12 +57,14 @@ public class MapParser {
                 graph.addVertex(curr);
 
                 if (curr.value.equals("S")) {
-                    if (graph.start != null) throw new RuntimeException("Error: Multiple starts cannot exist!");
+                    if (graph.start != null)
+                        throw new RuntimeException("Error: Multiple starts cannot exist!");
                     graph.start = curr;
                 }
 
                 if (curr.value.equals("F")) {
-                    if (graph.end != null) throw new RuntimeException("Error: Multiple ends cannot exist!");
+                    if (graph.end != null)
+                        throw new RuntimeException("Error: Multiple ends cannot exist!");
                     graph.end = curr;
                 }
 
@@ -79,5 +81,47 @@ public class MapParser {
                 }
             }
         }
+    }
+
+    public static String parseOutput(ArrayList<Vertex> path) {
+        StringBuilder sb = new StringBuilder();
+
+        int step = 0;
+        Vertex prev = null;
+
+        while (step < path.size()) {
+            Vertex curr = path.get(step);
+
+            if (prev != null && (prev.y != curr.y && prev.x != curr.x)) {
+                throw new RuntimeException("Error: Illegal movement at step " + step);
+            }
+
+            sb.append("%s. ".formatted(step + 1));
+
+            if (step == 0) {
+                sb.append("Start at ");
+
+            } else if (curr.x < prev.x) {
+                sb.append("Move up to ");
+
+            } else if (curr.x > prev.x) {
+                sb.append("Move down to ");
+
+            } else if (curr.y < prev.y) {
+                sb.append("Move left to ");
+
+            } else if (curr.y > prev.y) {
+                sb.append("Move right to ");
+            } else throw new RuntimeException("Error: Path stagnates unnaturally at step " + step + 1);
+
+            sb.append("(%d,%d)\n".formatted(curr.y, curr.x));
+
+            step++;
+            prev = curr;
+        }
+
+        step++;
+        sb.append("%s. Done!\n".formatted(step));
+        return sb.toString();
     }
 }

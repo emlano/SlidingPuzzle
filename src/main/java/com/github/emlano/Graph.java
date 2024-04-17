@@ -22,6 +22,13 @@ public class Graph {
         adjList.get(sv).add(dv);
     }
 
+    public ArrayList<Vertex> bfs() {
+
+        ArrayList<Vertex> vertices = new ArrayList<>(adjList.keySet());
+
+        return vertices;
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder();
