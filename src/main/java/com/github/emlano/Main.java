@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class Main {
     public static void main(String[] args) {
-        MapParser.file = "map.txt";
+        MapParser.file = "puzzle_20.txt";
         MapParser.parseMapText();
 
         Graph graph = new Graph();

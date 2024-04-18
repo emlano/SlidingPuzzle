@@ -19,8 +19,10 @@ public class MapParser {
 
             ArrayList<String> rowList = new ArrayList<>();
 
-            for (int i = 0; i < 10; i++) {
-                rowList.add(reader.readLine());
+            String textRow = reader.readLine();
+            while (textRow != null && !textRow.isEmpty()){
+                rowList.add(textRow);
+                textRow = reader.readLine();
             }
 
             fileReader.close();
