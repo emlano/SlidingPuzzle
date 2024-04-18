@@ -1,13 +1,13 @@
 package com.github.emlano;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Graph {
     private final Map<Vertex, ArrayList<Vertex>> adjList;
     public Vertex start = null;
     public Vertex end = null;
+    public int gridHeight;
+    public int gridWidth;
 
     public Graph() {
         this.adjList = new HashMap<>();
@@ -22,11 +22,76 @@ public class Graph {
         adjList.get(sv).add(dv);
     }
 
-    public ArrayList<Vertex> bfs() {
+    public List<Vertex> findShortestPath() {
+        if (start == null || end == null) throw new RuntimeException("Error: start or end not set");
 
-        ArrayList<Vertex> vertices = new ArrayList<>(adjList.keySet());
+        ArrayList<Vertex> exploredList = new ArrayList<>();
+        Queue<Vertex> visitedList = new ArrayDeque<>();
+        Vertex parent = null;
 
-        return vertices;
+        visitedList.add(start);
+
+        while (!visitedList.isEmpty()) {
+            Vertex sv = visitedList.remove();
+            exploredList.add(sv);
+
+            if (sv.value.equals("F")) break;
+
+            for (Vertex dv : adjList.get(sv)) {
+                if (dv.value.equals(".")) {
+                    dv = slideOnIce(dv, sv);
+                }
+
+                if (!dv.value.equals("0") && !exploredList.contains(dv) && !visitedList.contains(dv)) {
+                    visitedList.add(dv);
+                    dv.parent = sv;
+                }
+            }
+        }
+
+        ArrayList<Vertex> path = new ArrayList<>();
+
+        Vertex curr = end;
+        while (curr != null) {
+            path.add(curr);
+            curr = curr.parent;
+        }
+
+        return path.reversed();
+    }
+
+    private Vertex slideOnIce(Vertex curr, Vertex prev) {
+        int nextPosX = 0;
+        int nextPosY = 0;
+        Vertex next = null;
+
+        if (curr.x - prev.x < 0) {
+            nextPosX = curr.x - 1;
+            nextPosY = curr.y;
+
+        } else if (curr.x - prev.x > 0) {
+            nextPosX = curr.x + 1;
+            nextPosY = curr.y;
+
+        } else if (curr.y - prev.y < 0) {
+            nextPosX = curr.x;
+            nextPosY = curr.y - 1;
+
+        } else if (curr.y - prev.y > 0) {
+            nextPosX = curr.x;
+            nextPosY = curr.y + 1;
+        }
+
+        for (Vertex v : adjList.get(curr)) {
+            if (v.x == nextPosX && v.y == nextPosY) {
+                next = v;
+                break;
+            }
+        }
+
+        if (next == null || next.value.equals("0")) return curr;
+        if (next.value.equals("F") || next.value.equals("S")) return next;
+        return slideOnIce(next, curr);
     }
 
     @Override

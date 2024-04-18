@@ -9,8 +9,9 @@ public class Main {
 
         Graph graph = new Graph();
         MapParser.parseGraph(graph);
-        System.out.println(graph);
 
-        System.out.println(MapParser.parseOutput(graph.bfs()));
+        ArrayList<Vertex> path = new ArrayList<>(graph.findShortestPath());
+        String output = MapParser.parseOutput(path);
+        System.out.println(output);
     }
 }

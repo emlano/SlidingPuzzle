@@ -4,6 +4,7 @@ public class Vertex {
     final int x;
     final int y;
     final String value;
+    Vertex parent;
 
     public Vertex(int x, int y, String value) {
         this.x = x;
@@ -28,6 +29,6 @@ public class Vertex {
 
     @Override
     public String toString() {
-        return "'%s' (%d,%d)".formatted(value ,x, y);
+        return "(%d,%d)".formatted(y, x);
     }
 }

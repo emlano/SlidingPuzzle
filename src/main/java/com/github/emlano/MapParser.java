@@ -50,6 +50,9 @@ public class MapParser {
     }
 
     public static void parseGraph(Graph graph) {
+        graph.gridHeight = mapHeight;
+        graph.gridWidth = mapWidth;
+
         for (int row = 0; row < mapHeight; row++) {
             for (int col = 0; col < mapWidth; col++) {
                 Vertex curr = vertices[row][col];
