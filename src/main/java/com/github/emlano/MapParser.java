@@ -17,7 +17,7 @@ public class MapParser {
         try(FileReader fileReader = new FileReader(file);
             BufferedReader reader = new BufferedReader(fileReader)) {
 
-            ArrayList<String> rowList = new ArrayList<>();
+            ArrayList<String> rowList = new ArrayList<>(); // Temp hold rows to get width and height
 
             String textRow = reader.readLine();
             while (textRow != null && !textRow.isEmpty()){
@@ -47,18 +47,17 @@ public class MapParser {
         } catch (IOException e) {
             throw new RuntimeException("Error: No such file found named \"%s\"".formatted(file));
         } catch (ArrayIndexOutOfBoundsException e) {
-            throw new RuntimeException("Error: Incorrect map dimensions, width and height must be 10");
+            throw new RuntimeException("Error: Incorrect map dimensions");
         }
     }
 
-    public static void parseGraph(Graph graph) {
+    public static void parseToGraph(Graph graph) {
         graph.gridHeight = mapHeight;
         graph.gridWidth = mapWidth;
 
         for (int row = 0; row < mapHeight; row++) {
             for (int col = 0; col < mapWidth; col++) {
                 Vertex curr = vertices[row][col];
-                Vertex prev = null;
                 graph.addVertex(curr);
 
                 if (curr.value.equals("S")) {
@@ -74,18 +73,20 @@ public class MapParser {
                 }
 
                 if (row > 0) {
-                    prev = vertices[row - 1][col];
+                    Vertex prev = vertices[row - 1][col];
                     graph.addEdge(curr, prev);
                     graph.addEdge(prev, curr);
                 }
 
                 if (col > 0) {
-                    prev = vertices[row][col - 1];
+                    Vertex prev = vertices[row][col - 1];
                     graph.addEdge(curr, prev);
                     graph.addEdge(prev, curr);
                 }
             }
         }
+
+        vertices =  null; // To release memory taken by the matrix
     }
 
     public static String parseOutput(ArrayList<Vertex> path) {
@@ -120,6 +121,7 @@ public class MapParser {
             } else if (curr.y > prev.y) {
                 sb.append("Move right to ");
             } else throw new RuntimeException("Error: Path stagnates unnaturally at step " + step + 1);
+            // Handle case where the x and y values are the same
 
             sb.append("(%d,%d)\n".formatted(curr.y, curr.x));
 
