@@ -91,6 +91,8 @@ public class MapParser {
     public static String parseOutput(ArrayList<Vertex> path) {
         StringBuilder sb = new StringBuilder();
 
+        if (path.size() == 1) return "X. No path found!";
+
         int step = 0;
         Vertex prev = null;
 
